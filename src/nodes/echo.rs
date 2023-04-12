@@ -3,7 +3,7 @@ use std::io::Write;
 use dist_system::{main_loop, Init, Message, Node};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 #[serde(tag = "type")]
 enum Payload {
