@@ -16,7 +16,7 @@ struct EchoNode {
 }
 
 impl Node<Payload, ()> for EchoNode {
-    fn new(state: (), init: Init) -> Self {
+    fn new(_state: (), _init: Init) -> Self {
         EchoNode { id: 2 }
     }
 

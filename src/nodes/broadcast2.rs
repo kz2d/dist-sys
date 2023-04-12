@@ -34,7 +34,7 @@ struct BroadcastNode {
 }
 
 impl Node<Payload, ()> for BroadcastNode {
-    fn new(state: (), init: Init) -> Self {
+    fn new(_state: (), init: Init) -> Self {
         BroadcastNode {
             id: 2,
             count: 0,
@@ -75,8 +75,8 @@ impl Node<Payload, ()> for BroadcastNode {
                     )
                     .send(out)?;
             }
-            Payload::ReadOk { messages } => {}
-            Payload::Topology { topology } => {
+            Payload::ReadOk { messages: _ } => {}
+            Payload::Topology { topology: _ } => {
                 message.reply(Payload::TopologyOk, &mut self.id).send(out)?;
             }
             Payload::TopologyOk => {}

@@ -1,7 +1,5 @@
 use std::{
-    collections::{HashMap, HashSet},
     io::Write,
-    ops::Add,
 };
 
 use dist_system::{main_loop, utils::merge_messages, Init, Message, Node};
@@ -52,7 +50,7 @@ impl CounterNode {
 }
 
 impl Node<Payload, ()> for CounterNode {
-    fn new(state: (), init: Init) -> Self {
+    fn new(_state: (), init: Init) -> Self {
         CounterNode {
             id: 2,
             counter: 0,

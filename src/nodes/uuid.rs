@@ -17,7 +17,7 @@ struct UUIDNode {
 }
 
 impl Node<Payload, ()> for UUIDNode {
-    fn new(state: (), init: Init) -> Self {
+    fn new(_state: (), init: Init) -> Self {
         UUIDNode {
             id: 2,
             node_name: init.node_id,

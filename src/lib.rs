@@ -1,10 +1,10 @@
 pub mod utils;
 
 use core::fmt::Debug;
-use serde::{Deserialize, Serialize, Serializer};
-use serde_json::ser::PrettyFormatter;
+use serde::{Deserialize, Serialize};
+
 use std::{
-    io::{self, stdin, stdout, BufReader, Write},
+    io::{self, stdin, stdout, Write},
     sync::mpsc::channel,
     thread, time,
 };
@@ -46,7 +46,7 @@ impl<P: Serialize + Debug> Message<P> {
     pub fn send(&self, out: &mut impl Write) -> anyhow::Result<()> {
         eprintln!("out: {:?}", self);
         serde_json::to_writer(&mut *out, self)?;
-        out.write(b"\n")?;
+        out.write_all(b"\n")?;
         Ok(())
     }
 }
@@ -76,7 +76,7 @@ pub struct Init {
 pub trait Node<P: Serialize + Debug, InitState> {
     fn new(state: InitState, init: Init) -> Self;
     fn handle(&mut self, message: Message<P>, out: &mut impl Write) -> anyhow::Result<()>;
-    fn timed_call(&mut self, out: &mut impl Write) -> anyhow::Result<()> {
+    fn timed_call(&mut self, _out: &mut impl Write) -> anyhow::Result<()> {
         Ok(())
     }
 }
