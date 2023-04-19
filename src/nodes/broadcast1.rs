@@ -1,3 +1,5 @@
+mod db;
+
 use std::{collections::HashMap, io::Write};
 
 use dist_system::{main_loop, Init, Message, Node};

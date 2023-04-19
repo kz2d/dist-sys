@@ -1,13 +1,15 @@
 pub mod utils;
-
+pub mod rpc;
 use core::fmt::Debug;
 use serde::{Deserialize, Serialize};
 
 use std::{
     io::{self, stdin, stdout, Write},
-    sync::mpsc::channel,
-    thread, time,
+    sync::{mpsc::channel, Mutex, Arc},
+    thread, time, rc::Rc, borrow::Cow, cell::RefCell,
 };
+
+use crate::utils::await_event::ExpectedMessages;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Message<P: Serialize + Debug> {
@@ -109,12 +111,20 @@ pub fn main_loop<
         .reply(InitPayload::InitOk {}, &mut 1)
         .send(&mut out)?;
 
+	let waited = Arc::new(Mutex::new(ExpectedMessages::default()));
+
+	let waited_reciver = waited.clone();
     let (sn, rw) = channel();
     let thread_reader = thread::spawn(move || {
         let stdin = io::stdin().lock();
         for i in serde_json::Deserializer::from_reader(stdin).into_iter::<Message<P>>() {
             let i = i.unwrap();
             eprintln!("in: {:?}", i);
+			
+			let lock = waited_reciver.lock().unwrap();
+			if i.body.in_reply_to.is_some() && lock.msg_id.contains(&i.body.in_reply_to.unwrap()) {
+				lock.responses.push(i);
+			}
             sn.send(i.clone()).unwrap();
         }
     });

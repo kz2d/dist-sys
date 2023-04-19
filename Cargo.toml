@@ -38,3 +38,7 @@ path = "src/nodes/broadcast_optimize1.rs"
 [[bin]]
 name = "counter"
 path = "src/nodes/counter.rs" 
+
+[[bin]]
+name = "kafka1"
+path = "src/nodes/kafka_log1.rs" 
